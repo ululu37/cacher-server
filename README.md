@@ -114,3 +114,32 @@ sudo systemctl enable docker
 
 ```
 ---
+
+
+### ติดตั้ง verdaccio
+Uninstall เวอร์ชั่นเก่าออก:
+```bash
+mkdir -p /opt/verdaccio_conf
+```
+docker compose
+```bash
+version: "3.8"
+
+services:
+  verdaccio:
+    image: verdaccio/verdaccio:5
+    container_name: npm-cache
+    restart: unless-stopped
+    ports:
+      - "4873:4873"
+    volumes:
+      - verdaccio_data:/verdaccio/storage
+      - /opt/verdaccio_conf:/verdaccio/conf
+    environment:
+      - VERDACCIO_PUBLIC_URL=http://192.168.100.180:4873
+
+volumes:
+  verdaccio_data:
+
+```
+---
