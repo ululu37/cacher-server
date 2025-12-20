@@ -166,4 +166,10 @@ logs:
 listen: 0.0.0.0:4873
 
 ```
+### client
+```bash
+
+npm config set registry http://192.168.100.180:4873
+
+```
 ---
