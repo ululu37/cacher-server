@@ -142,4 +142,28 @@ volumes:
   verdaccio_data:
 
 ```
+config
+```bash
+nano /opt/verdaccio_conf/config.yaml
+```
+ใส่:
+```bash
+storage: /verdaccio/storage
+
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+
+packages:
+  "**":
+    access: $all
+    publish: $all
+    proxy: npmjs
+
+logs:
+  - {type: stdout, format: pretty, level: http}
+
+listen: 0.0.0.0:4873
+
+```
 ---
