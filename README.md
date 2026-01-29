@@ -36,6 +36,79 @@ Acquire::http::Proxy "http://<IP-Server>:3142";
 sudo apt update
 
 ```
+
+
+## pull push registry image ที่จำเป็น
+```bash
+# ===============================
+# Docker Registry: 192.168.100.180:5000
+# ===============================
+
+# ---------- library/node ----------
+docker pull node:20
+docker tag node:20 192.168.100.180:5000/library/node:20
+docker push 192.168.100.180:5000/library/node:20
+
+
+# ---------- library/nginx ----------
+docker pull nginx:latest
+docker tag nginx:latest 192.168.100.180:5000/library/nginx:latest
+docker push 192.168.100.180:5000/library/nginx:latest
+
+
+# ---------- library/alpine ----------
+docker pull alpine:latest
+docker tag alpine:latest 192.168.100.180:5000/library/alpine:latest
+docker push 192.168.100.180:5000/library/alpine:latest
+
+
+# ---------- library/mysql ----------
+docker pull mysql:8
+docker tag mysql:8 192.168.100.180:5000/library/mysql:8
+docker push 192.168.100.180:5000/library/mysql:8
+
+
+# ---------- library/phpmyadmin ----------
+docker pull phpmyadmin:latest
+docker tag phpmyadmin:latest 192.168.100.180:5000/library/phpmyadmin:latest
+docker push 192.168.100.180:5000/library/phpmyadmin:latest
+
+
+# ---------- gitlab/gitlab-runner ----------
+docker pull gitlab/gitlab-runner:latest
+docker tag gitlab/gitlab-runner:latest 192.168.100.180:5000/gitlab/gitlab-runner:latest
+docker push 192.168.100.180:5000/gitlab/gitlab-runner:latest
+
+
+# ---------- portainer/portainer-ce ----------
+docker pull portainer/portainer-ce:latest
+docker tag portainer/portainer-ce:latest 192.168.100.180:5000/portainer/portainer-ce:latest
+docker push 192.168.100.180:5000/portainer/portainer-ce:latest
+
+# ---------- library/node:20-alpine ----------
+docker pull node:20-alpine
+docker tag node:20-alpine localhost:5000/library/node:20-alpine
+docker push localhost:5000/library/node:20-alpine
+
+# ---------- library/docker:26-dind ----------
+docker pull docker:26-dind
+docker tag docker:26-dind localhost:5000/library/docker:26-dind
+docker push localhost:5000/library/docker:26-dind
+
+# ---------- library/docker:26 ----------
+docker pull docker:26
+docker tag docker:26 localhost:5000/library/docker:26
+docker push localhost:5000/library/docker:26
+
+# ---------- library/alpine-ssh:latest ----------
+docker pull panubo/sshd:latest
+docker tag panubo/sshd:latest localhost:5000/library/alpine-ssh:latest
+docker push localhost:5000/library/alpine-ssh:latest
+
+docker pull mysql:8.0
+docker tag mysql:8.0 localhost:5000/library/mysql:8.0
+docker push localhost:5000/library/mysql:8.0
+```
 ---
 ### apache2
 ไว้โหลดไฟล์ gpg
