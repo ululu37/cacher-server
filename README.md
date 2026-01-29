@@ -36,79 +36,6 @@ Acquire::http::Proxy "http://<IP-Server>:3142";
 sudo apt update
 
 ```
-
-
-## pull push registry image ที่จำเป็น
-```bash
-# ===============================
-# Docker Registry:  localhost:5000
-# ===============================
-
-# ---------- library/node ----------
-docker pull node:20
-docker tag node:20  localhost:5000/library/node:20
-docker push  localhost:5000/library/node:20
-
-
-# ---------- library/nginx ----------
-docker pull nginx:latest
-docker tag nginx:latest  localhost:5000/library/nginx:latest
-docker push  localhost:5000/library/nginx:latest
-
-
-# ---------- library/alpine ----------
-docker pull alpine:latest
-docker tag alpine:latest  localhost:5000/library/alpine:latest
-docker push  localhost:5000/library/alpine:latest
-
-
-# ---------- library/mysql ----------
-docker pull mysql:8
-docker tag mysql:8  localhost:5000/library/mysql:8
-docker push  localhost:5000/library/mysql:8
-
-
-# ---------- library/phpmyadmin ----------
-docker pull phpmyadmin:latest
-docker tag phpmyadmin:latest  localhost:5000/library/phpmyadmin:latest
-docker push  localhost:5000/library/phpmyadmin:latest
-
-
-# ---------- gitlab/gitlab-runner ----------
-docker pull gitlab/gitlab-runner:latest
-docker tag gitlab/gitlab-runner:latest  localhost:5000/gitlab/gitlab-runner:latest
-docker push  localhost:5000/gitlab/gitlab-runner:latest
-
-
-# ---------- portainer/portainer-ce ----------
-docker pull portainer/portainer-ce:latest
-docker tag portainer/portainer-ce:latest  localhost:5000/portainer/portainer-ce:latest
-docker push  localhost:5000/portainer/portainer-ce:latest
-
-# ---------- library/node:20-alpine ----------
-docker pull node:20-alpine
-docker tag node:20-alpine localhost:5000/library/node:20-alpine
-docker push localhost:5000/library/node:20-alpine
-
-# ---------- library/docker:26-dind ----------
-docker pull docker:26-dind
-docker tag docker:26-dind localhost:5000/library/docker:26-dind
-docker push localhost:5000/library/docker:26-dind
-
-# ---------- library/docker:26 ----------
-docker pull docker:26
-docker tag docker:26 localhost:5000/library/docker:26
-docker push localhost:5000/library/docker:26
-
-# ---------- library/alpine-ssh:latest ----------
-docker pull panubo/sshd:latest
-docker tag panubo/sshd:latest localhost:5000/library/alpine-ssh:latest
-docker push localhost:5000/library/alpine-ssh:latest
-
-docker pull mysql:8.0
-docker tag mysql:8.0 localhost:5000/library/mysql:8.0
-docker push localhost:5000/library/mysql:8.0
-```
 ---
 ### apache2
 ไว้โหลดไฟล์ gpg
@@ -187,6 +114,144 @@ sudo systemctl enable docker
 
 ```
 ---
+### portainer
+ติดตั้ง
+
+
+
+---
+### registry
+
+ติดตั้ง
+สร้าง volume
+```bash
+sudo docker volume create registry_data
+
+```
+
+
+docker-compose
+```bash
+networks:
+  app_net:
+    device: 
+
+volumes:
+  registry_data:
+    device: 
+
+services:
+  registry:
+    image: registry:2
+    container_name: registry
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      REGISTRY_STORAGE_DELETE_ENABLED: 'true'
+    networks:
+      - app_net
+    volumes:
+      - registry_data:/var/lib/registry
+
+  registry-ui:
+    image: joxit/docker-registry-ui:main
+    container_name: registry-ui
+    restart: always
+    networks:
+      - app_net
+    ports:
+      - "8080:80"
+    environment:
+      - SINGLE_REGISTRY=true
+      - REGISTRY_TITLE=Docker Registry UI
+      - DELETE_IMAGES=true
+      - SHOW_CONTENT_DIGEST=true
+      - NGINX_PROXY_PASS_URL=http://registry:5000
+      - SHOW_CATALOG_NB_TAGS=true
+      - CATALOG_MIN_BRANCHES=1
+      - CATALOG_MAX_BRANCHES=1
+      - TAGLIST_PAGE_SIZE=100
+      - REGISTRY_SECURED=false
+      - CATALOG_ELEMENTS_LIMIT=1000
+    depends_on:
+      - registry
+```
+
+
+
+pull push registry image ที่จำเป็น
+```bash
+# ===============================
+# Docker Registry:  localhost:5000
+# ===============================
+
+# ---------- library/node ----------
+docker pull node:20
+docker tag node:20  localhost:5000/library/node:20
+docker push  localhost:5000/library/node:20
+
+
+# ---------- library/nginx ----------
+docker pull nginx:latest
+docker tag nginx:latest  localhost:5000/library/nginx:latest
+docker push  localhost:5000/library/nginx:latest
+
+
+# ---------- library/alpine ----------
+docker pull alpine:latest
+docker tag alpine:latest  localhost:5000/library/alpine:latest
+docker push  localhost:5000/library/alpine:latest
+
+
+# ---------- library/mysql ----------
+docker pull mysql:8
+docker tag mysql:8  localhost:5000/library/mysql:8
+docker push  localhost:5000/library/mysql:8
+
+
+# ---------- library/phpmyadmin ----------
+docker pull phpmyadmin:latest
+docker tag phpmyadmin:latest  localhost:5000/library/phpmyadmin:latest
+docker push  localhost:5000/library/phpmyadmin:latest
+
+
+# ---------- gitlab/gitlab-runner ----------
+docker pull gitlab/gitlab-runner:latest
+docker tag gitlab/gitlab-runner:latest  localhost:5000/gitlab/gitlab-runner:latest
+docker push  localhost:5000/gitlab/gitlab-runner:latest
+
+
+# ---------- portainer/portainer-ce ----------
+docker pull portainer/portainer-ce:latest
+docker tag portainer/portainer-ce:latest  localhost:5000/portainer/portainer-ce:latest
+docker push  localhost:5000/portainer/portainer-ce:latest
+
+# ---------- library/node:20-alpine ----------
+docker pull node:20-alpine
+docker tag node:20-alpine localhost:5000/library/node:20-alpine
+docker push localhost:5000/library/node:20-alpine
+
+# ---------- library/docker:26-dind ----------
+docker pull docker:26-dind
+docker tag docker:26-dind localhost:5000/library/docker:26-dind
+docker push localhost:5000/library/docker:26-dind
+
+# ---------- library/docker:26 ----------
+docker pull docker:26
+docker tag docker:26 localhost:5000/library/docker:26
+docker push localhost:5000/library/docker:26
+
+# ---------- library/alpine-ssh:latest ----------
+docker pull panubo/sshd:latest
+docker tag panubo/sshd:latest localhost:5000/library/alpine-ssh:latest
+docker push localhost:5000/library/alpine-ssh:latest
+
+docker pull mysql:8.0
+docker tag mysql:8.0 localhost:5000/library/mysql:8.0
+docker push localhost:5000/library/mysql:8.0
+```
+
 
 
 ### ติดตั้ง verdaccio
